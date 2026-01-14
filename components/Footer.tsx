@@ -1,7 +1,7 @@
 'use client';
 
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
-
+import Image from 'next/image';
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -33,9 +33,18 @@ export default function Footer() {
       <div className="relative container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="md:col-span-2">
-            <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4">
-              Safar.AI
-            </h3>
+            <div className='px-16 py-4 flex justify-center md:justify-start'>
+              <Image
+                onClick={() => scrollToSection('hero')}
+                src="/images/logo.png"
+                alt="logo"
+                width={120}
+                height={120}
+                className="cursor-pointer w-[100px] h-[80px] md:w-[110px] md:h-[100px]"
+                priority
+              />
+            </div>
+
             <p className="text-slate-400 max-w-md">
               تجارب سفر مدعومة بالذكاء الاصطناعي مصممة خصيصًا لشخصيتك. اكتشف وجهات تتناسب مع حمضك النووي الفريد للسفر.
             </p>

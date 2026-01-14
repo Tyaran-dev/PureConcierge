@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-
+import Image from 'next/image';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -67,49 +67,49 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: () => void }) {
   // }, []);
 
 
-  // useEffect(() => {
-  //   if (!heroRef.current || !backgroundRef.current) return;
-  //
-  //   const ctx = gsap.context(() => {
-  //     gsap.set(backgroundRef.current, {
-  //       scale: 1,
-  //       opacity: 1,
-  //       transformOrigin: 'center center',
-  //     });
-  //
-  //     gsap.set(
-  //       [headlineRef.current, subheadlineRef.current, ctaRef.current],
-  //       { opacity: 1, y: 0 }
-  //     );
-  //
-  //     gsap.timeline({
-  //       scrollTrigger: {
-  //         trigger: heroRef.current,
-  //         start: 'top top',
-  //         end: '+=250%',
-  //         scrub: true,
-  //         pin: true,
-  //         anticipatePin: 1,
-  //         invalidateOnRefresh: true,
-  //       },
-  //     })
-  //       .to(backgroundRef.current, {
-  //         scale: 3.8,
-  //         ease: 'none',
-  //       })
-  //       .to(
-  //         [headlineRef.current, subheadlineRef.current, ctaRef.current],
-  //         {
-  //           opacity: 0,
-  //           y: -50,
-  //           ease: 'none',
-  //         },
-  //         0
-  //       );
-  //   }, heroRef);
-  //
-  //   return () => ctx.revert();
-  // }, []);
+  useEffect(() => {
+    if (!heroRef.current || !backgroundRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(backgroundRef.current, {
+        scale: 1,
+        opacity: 1,
+        transformOrigin: 'center center',
+      });
+
+      gsap.set(
+        [headlineRef.current, subheadlineRef.current, ctaRef.current],
+        { opacity: 1, y: 0 }
+      );
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: '+=150%',
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      })
+        .to(backgroundRef.current, {
+          scale: 6.8,
+          ease: "power1.inOut"
+        })
+        .to(
+          [headlineRef.current, subheadlineRef.current, ctaRef.current],
+          {
+            opacity: 0,
+            y: -50,
+            ease: 'none',
+          },
+          0
+        );
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
 
 
   const handleOpenQuiz = () => {
@@ -135,15 +135,29 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: () => void }) {
         style={{ backgroundSize: '200% 200%' }}
       /> */}
 
-      <div ref={backgroundRef}
-        className="absolute inset-0 bg-[url('/images/hero.jpg')] bg-cover bg-center transform-gpu" />
 
+      <div
+        className="absolute inset-0 bg-[url('/images/hero-background.jpg')] bg-cover bg-center transform-gpu" />
+      <Image
+        ref={backgroundRef}
+         alt="hero"
+        src="/images/hero8.webp"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+        style={{
+          // Optimize for mobile
+          transform: 'translateZ(0)', // Force GPU acceleration
+          backfaceVisibility: 'hidden',
+        }}
+      />
       {/* <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div> */}
 
-      <div className="relative container mx-auto px-4 ">
+      <div className="hidden md:block relative container mx-auto px-4 ">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl bg-white/60 dark:bg-slate-900/60 border border-white/20 dark:border-slate-700/30 mb-8">
           <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           <span className="text-sm font-medium text-slate-700 dark:text-slate-300">

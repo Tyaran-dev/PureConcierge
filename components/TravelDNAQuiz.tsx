@@ -492,7 +492,7 @@ export default function TravelDNAQuiz() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-3xl">
+    <div className="relative overflow-hidden rounded-3xl m-4 md:m-0">
       {/* Animated gradient background */}
       <div
         ref={backgroundRef}
@@ -510,7 +510,7 @@ export default function TravelDNAQuiz() {
         <MapPin className="floating-icon absolute top-[40%] left-[5%] w-6 h-6 text-blue-400/30 dark:text-blue-300/20" />
       </div>
 
-      <div className="relative flex items-center justify-center p-6 md:p-8 bg-slate-900/60">
+      <div className="relative flex items-center justify-center p-2 md:p-8 bg-slate-900/60 ">
         <div ref={containerRef} className="w-full max-w-2xl">
           {/* Header with glassmorphism */}
           <div className="text-center mb-8">

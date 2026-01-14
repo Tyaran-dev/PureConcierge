@@ -87,11 +87,9 @@ export default function Header({ onOpenQuiz }: { onOpenQuiz?: () => void }) {
             alt="logo"
             width={80}
             height={80}
-            className="cursor-pointer w-[60px] h-[60px] md:w-[80px] md:h-[80px]"
+            className="cursor-pointer w-[60px] h-[60px] md:w-[100px] md:h-[80px]"
             priority
           />
-
-
 
           <ul className="hidden  w-[50%] md:flex items-center gap-8  justify-between">
             {navLinks.map((link) => (
