@@ -67,49 +67,49 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: () => void }) {
   // }, []);
 
 
-  useEffect(() => {
-    if (!heroRef.current || !backgroundRef.current) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(backgroundRef.current, {
-        scale: 1,
-        opacity: 1,
-        transformOrigin: 'center center',
-      });
-
-      gsap.set(
-        [headlineRef.current, subheadlineRef.current, ctaRef.current],
-        { opacity: 1, y: 0 }
-      );
-
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: '+=250%',
-          scrub: true,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      })
-        .to(backgroundRef.current, {
-          scale: 3.8,
-          ease: 'none',
-        })
-        .to(
-          [headlineRef.current, subheadlineRef.current, ctaRef.current],
-          {
-            opacity: 0,
-            y: -50,
-            ease: 'none',
-          },
-          0
-        );
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
+  // useEffect(() => {
+  //   if (!heroRef.current || !backgroundRef.current) return;
+  //
+  //   const ctx = gsap.context(() => {
+  //     gsap.set(backgroundRef.current, {
+  //       scale: 1,
+  //       opacity: 1,
+  //       transformOrigin: 'center center',
+  //     });
+  //
+  //     gsap.set(
+  //       [headlineRef.current, subheadlineRef.current, ctaRef.current],
+  //       { opacity: 1, y: 0 }
+  //     );
+  //
+  //     gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: heroRef.current,
+  //         start: 'top top',
+  //         end: '+=250%',
+  //         scrub: true,
+  //         pin: true,
+  //         anticipatePin: 1,
+  //         invalidateOnRefresh: true,
+  //       },
+  //     })
+  //       .to(backgroundRef.current, {
+  //         scale: 3.8,
+  //         ease: 'none',
+  //       })
+  //       .to(
+  //         [headlineRef.current, subheadlineRef.current, ctaRef.current],
+  //         {
+  //           opacity: 0,
+  //           y: -50,
+  //           ease: 'none',
+  //         },
+  //         0
+  //       );
+  //   }, heroRef);
+  //
+  //   return () => ctx.revert();
+  // }, []);
 
 
   const handleOpenQuiz = () => {
