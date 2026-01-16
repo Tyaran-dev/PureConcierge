@@ -24,7 +24,8 @@ import {
   MapPin,
   Sun,
   Moon,
-  Globe
+  Globe,
+  Calendar
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
@@ -44,6 +45,7 @@ type TravelDNA = {
   budget_level: string;
   travel_with: string;
   interests: string[];
+  days_range: string
 };
 
 type StepData = {
@@ -202,6 +204,29 @@ const steps: StepData[] = [
       },
     ],
   },
+  {
+    question: "كم عدد الأيام التي تفضل أن تستمر رحلتك؟",
+    key: "days_range",
+    illustration: <Calendar className="w-12 h-12" />,
+    options: [
+      {
+        value: "3-5",
+        label: "رحلة قصيرة (3–5 أيام)",
+        gradient: "from-blue-500 to-cyan-500"
+      },
+      {
+        value: "5-10",
+        label: "رحلة متوسطة (5–10 أيام)",
+        gradient: "from-emerald-500 to-teal-500"
+      },
+      {
+        value: "10-15",
+        label: "رحلة طويلة (10–15 يوم)",
+        gradient: "from-purple-500 to-indigo-500"
+      }
+    ]
+  },
+
 ];
 
 export default function TravelDNAQuiz() {
@@ -381,6 +406,40 @@ export default function TravelDNAQuiz() {
     }
   };
 
+  const handleSubmit = () => {
+    const travelDNA: TravelDNA = {
+      interests: answers.interests || [],
+      personality: answers.personality || '',
+      pace: answers.pace || '',
+      budget_level: answers.budget_level || '',
+      travel_with: answers.travel_with || '',
+      days_range: answers.days_range || ''
+    };
+
+    console.log('Travel DNA:', travelDNA);
+    setIsSubmitted(true);
+
+    // Cinematic success animation
+    if (stepRef.current && containerRef.current) {
+      const tl = gsap.timeline();
+
+      tl.to(stepRef.current, {
+        scale: 0.9,
+        opacity: 0,
+        filter: 'blur(20px)',
+        duration: 0.6,
+        ease: 'power2.in',
+      });
+
+      tl.fromTo(
+        containerRef.current,
+        { scale: 0.9 },
+        { scale: 1, duration: 0.8, ease: 'back.out(1.7)' },
+        '-=0.3'
+      );
+    }
+  };
+
   const isSelected = (value: string): boolean => {
     const key = currentStepData.key;
     if (currentStepData.multiSelect) {
@@ -442,38 +501,7 @@ export default function TravelDNAQuiz() {
     }
   };
 
-  const handleSubmit = () => {
-    const travelDNA: TravelDNA = {
-      personality: answers.personality || '',
-      pace: answers.pace || '',
-      budget_level: answers.budget_level || '',
-      travel_with: answers.travel_with || '',
-      interests: answers.interests || [],
-    };
 
-    console.log('Travel DNA:', travelDNA);
-    setIsSubmitted(true);
-
-    // Cinematic success animation
-    if (stepRef.current && containerRef.current) {
-      const tl = gsap.timeline();
-
-      tl.to(stepRef.current, {
-        scale: 0.9,
-        opacity: 0,
-        filter: 'blur(20px)',
-        duration: 0.6,
-        ease: 'power2.in',
-      });
-
-      tl.fromTo(
-        containerRef.current,
-        { scale: 0.9 },
-        { scale: 1, duration: 0.8, ease: 'back.out(1.7)' },
-        '-=0.3'
-      );
-    }
-  };
 
   if (!mounted) {
     return null;
@@ -487,6 +515,7 @@ export default function TravelDNAQuiz() {
         budgetLevel={answers.budget_level || ''}
         travelWith={answers.travel_with || ''}
         interests={answers.interests || []}
+        days_range={answers.days_range || ''}
       />
     );
   }
@@ -595,8 +624,8 @@ export default function TravelDNAQuiz() {
                     key={option.value}
                     onClick={(e) => handleSelect(option.value, e)}
                     className={`option-card group w-full text-left p-5 md:p-6 rounded-2xl transition-all duration-500 relative overflow-hidden border-2 ${isSelected(option.value)
-                        ? 'shadow-xl scale-[1.02] backdrop-blur-xl bg-white/90 dark:bg-slate-800/90 border-blue-500'
-                        : 'backdrop-blur-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white/70 dark:hover:bg-slate-800/70 hover:scale-[1.01] hover:shadow-lg border-white/30 dark:border-slate-700/30'
+                      ? 'shadow-xl scale-[1.02] backdrop-blur-xl bg-white/90 dark:bg-slate-800/90 border-blue-500'
+                      : 'backdrop-blur-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white/70 dark:hover:bg-slate-800/70 hover:scale-[1.01] hover:shadow-lg border-white/30 dark:border-slate-700/30'
                       }`}
                   >
                     {/* Gradient overlay on hover */}
@@ -606,8 +635,8 @@ export default function TravelDNAQuiz() {
                       {option.icon && (
                         <div
                           className={`p-3 rounded-xl transition-all duration-500 ${isSelected(option.value)
-                              ? `bg-gradient-to-br ${option.gradient} text-white shadow-lg`
-                              : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-slate-600'
+                            ? `bg-gradient-to-br ${option.gradient} text-white shadow-lg`
+                            : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-slate-600'
                             }`}
                         >
                           {option.icon}
@@ -615,8 +644,8 @@ export default function TravelDNAQuiz() {
                       )}
                       <span
                         className={`font-semibold flex-1 transition-colors duration-300 ${isSelected(option.value)
-                            ? 'text-slate-900 dark:text-white'
-                            : 'text-slate-700 dark:text-slate-300'
+                          ? 'text-slate-900 dark:text-white'
+                          : 'text-slate-700 dark:text-slate-300'
                           }`}
                       >
                         {option.label}
@@ -664,8 +693,8 @@ export default function TravelDNAQuiz() {
                   onClick={handleNext}
                   disabled={!canProceed()}
                   className={`flex-1 py-4 px-8 rounded-xl font-bold transition-all duration-500 shadow-lg ${canProceed()
-                      ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-500 hover:via-cyan-500 hover:to-teal-500 text-white hover:shadow-2xl hover:scale-105 active:scale-95'
-                      : 'bg-slate-300/50 dark:bg-slate-700/50 text-slate-400 dark:text-slate-500 cursor-not-allowed backdrop-blur-xl'
+                    ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-500 hover:via-cyan-500 hover:to-teal-500 text-white hover:shadow-2xl hover:scale-105 active:scale-95'
+                    : 'bg-slate-300/50 dark:bg-slate-700/50 text-slate-400 dark:text-slate-500 cursor-not-allowed backdrop-blur-xl'
                     }`}
                 >
                   {isLastStep ? 'أكمل رحلتك' : 'متابعة'}
