@@ -6,7 +6,7 @@ export async function generatePackages(quizAnswers: {
   travel_with: string;
   days_range: string;
 }) {
-  const res = await fetch("http://localhost:5000/pacakes/generatePackges", {
+  const res = await fetch("https://api.pureconcierges.com/pacakes/generatePackges", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
