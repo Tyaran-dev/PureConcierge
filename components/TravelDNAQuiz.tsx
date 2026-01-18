@@ -172,12 +172,7 @@ const steps: StepData[] = [
     multiSelect: true,
     illustration: <Camera className="w-12 h-12" />,
     options: [
-      {
-        value: "photography",
-        label: "التصوير الفوتوغرافي",
-        icon: <Camera className="w-5 h-5" />,
-        gradient: "from-blue-500 to-cyan-500"
-      },
+
       {
         value: "food",
         label: "الطعام",

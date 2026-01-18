@@ -52,7 +52,7 @@ export default function Home() {
       </button>
 
       <Dialog open={isQuizOpen} onOpenChange={setIsQuizOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-0 bg-transparent shadow-none [&>button]:absolute [&>button]:left-4 [&>button]:top-4 [&>button]:z-50 [&>button]:rounded-full [&>button]:bg-white/90 [&>button]:dark:bg-slate-900/90 [&>button]:backdrop-blur-xl [&>button]:p-2 [&>button]:border [&>button]:border-white/20 [&>button]:dark:border-slate-700/30 [&>button]:shadow-lg [&>button]:hover:scale-110 [&>button]:transition-all">
+        <DialogContent className="max-w-4xl md:max-w-[50%] max-h-[90vh] overflow-y-auto p-0 border-0 bg-transparent shadow-none [&>button]:absolute [&>button]:left-4 [&>button]:top-4 [&>button]:z-50 [&>button]:rounded-full [&>button]:bg-white/90 [&>button]:dark:bg-slate-900/90 [&>button]:backdrop-blur-xl [&>button]:p-2 [&>button]:border [&>button]:border-white/20 [&>button]:dark:border-slate-700/30 [&>button]:shadow-lg [&>button]:hover:scale-110 [&>button]:transition-all">
           <div className="relative">
             <TravelDNAQuiz />
           </div>

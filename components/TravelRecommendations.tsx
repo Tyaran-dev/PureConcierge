@@ -40,10 +40,18 @@ export default function TravelRecommendations({
   const containerRef = useRef<HTMLDivElement>(null);
   const packagesRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+const [openDay, setOpenDay] = useState<number | null>(1);
 
+
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+
+    // Don't start a new request if one is already in progress
+    if (isFetchingRef.current) return;
+
+    isFetchingRef.current = true;
 
     const quizAnswers = {
       interests,
@@ -57,14 +65,14 @@ export default function TravelRecommendations({
     async function loadPackages() {
       try {
         setLoading(true);
-
         const res = await generatePackages(quizAnswers);
 
         const mappedPackages = res.packages.map((pkg: any, index: number) => ({
           id: index,
           name: pkg.destination,
+          destination: pkg.destination,
           country: pkg.country_code,
-          city: pkg.destination.split(", ")[1],
+          city: pkg.destination.split(", ")[1] || pkg.destination,
           lat: pkg.lat,
           lng: pkg.lng,
           image: pkg.image,
@@ -73,25 +81,24 @@ export default function TravelRecommendations({
           price: `$${pkg.estimated_budget.total_trip}`,
           tags: interests,
           matchScore: 90,
+          travel_persona_match: "Perfect Match",
+          why_this_destination: pkg.why_this_destination,
+          trip_duration_days: pkg.trip_duration_days,
+          estimated_budget: pkg.estimated_budget,
+          daily_plan: pkg.daily_plan || []
         }));
 
         setRecommendedPackages(mappedPackages);
       } catch (error) {
         console.error("Failed to load packages:", error);
       } finally {
-        setLoading(false); // ✅ مهم
+        setLoading(false);
+        isFetchingRef.current = false;
       }
     }
 
     loadPackages();
-  }, [
-    personality,
-    pace,
-    budgetLevel,
-    travelWith,
-    interests,
-    days_range,
-  ]);
+  }, [personality, pace, budgetLevel, travelWith, interests, days_range]);
 
   function PackageSkeleton() {
     return (
@@ -269,13 +276,13 @@ export default function TravelRecommendations({
         </div>
       </div>
 
-      {/* {selectedPackage && (
+      {selectedPackage && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 "
           onClick={() => setSelectedPackage(null)}
         >
           <div
-            className="relative max-w-2xl w-full backdrop-blur-2xl bg-white/90 dark:bg-slate-900/90 rounded-[2rem] shadow-2xl border border-white/20 dark:border-slate-700/30 overflow-hidden"
+            className="relative  max-w-2xl w-full backdrop-blur-2xl max-h-[90%] custom-scrollbar overflow-auto bg-white/90 dark:bg-slate-900/90 rounded-[2rem] shadow-2xl border border-white/20 dark:border-slate-700/30 "
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -314,6 +321,71 @@ export default function TravelRecommendations({
                 {selectedPackage.description}
               </p>
 
+              <div className="mb-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20">
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
+                  Why This Destination?
+                </h3>
+                <p className="text-slate-700 dark:text-slate-300">
+                  {selectedPackage.why_this_destination}
+                </p>
+              </div>
+
+               <div className="mb-8">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+                  Daily Plan
+                </h3>
+
+                <div className="space-y-4">
+                  {selectedPackage.daily_plan.map((day) => (
+                    <div
+                      key={day.day}
+                      className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800"
+                    >
+                      <div className="font-bold mb-2">Day {day.day}</div>
+                      <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                        <li>🌅 Morning: {day.morning}</li>
+                        <li>🌞 Afternoon: {day.afternoon}</li>
+                        <li>🌙 Evening: {day.evening}</li>
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div> 
+{/* 
+              <div className="mb-8">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+                  Estimated Budget
+                </h3>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {Object.entries(selectedPackage.estimated_budget).map(
+                    ([key, value]) =>
+                      key !== 'currency' && (
+                        <div
+                          key={key}
+                          className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800"
+                        >
+                          <div className="text-xs text-slate-500 capitalize">
+                            {key.replaceAll('_', ' ')}
+                          </div>
+                          <div className="font-bold">
+                            {value} {selectedPackage.estimated_budget.currency}
+                          </div>
+                        </div>
+                      )
+                  )}
+                </div>
+              </div> */}
+
+              {selectedPackage.persona_type && (
+                <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+                  <div className="font-bold">{selectedPackage.persona_type}</div>
+                  <p className="text-sm opacity-90">
+                    {selectedPackage.travel_persona_match}
+                  </p>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center gap-2 p-4 rounded-xl bg-slate-100 dark:bg-slate-800">
                   <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -351,7 +423,7 @@ export default function TravelRecommendations({
             </div>
           </div>
         </div>
-      )} */}
+      )}
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
